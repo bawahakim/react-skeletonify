@@ -3,7 +3,7 @@ import SkeletonElement from "./SkeletonElement";
 import { SkeletonConfig } from "../context/skeleton-config";
 import { useSkeleton } from "../context/SkeletonContext";
 
-interface SkeletonWrapperProps {
+export interface SkeletonWrapperProps {
   loading: boolean;
   children: React.ReactNode;
   overrideConfig?: Partial<SkeletonConfig>;

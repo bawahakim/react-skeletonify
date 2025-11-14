@@ -1,0 +1,54 @@
+# .github/workflows/visual-tests.yml
+
+name: Visual Regression Tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  run-visual-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 1: Add the PNPM setup action
+      - name: Set up PNPM
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10 # Specify your PNPM version
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+
+      # Step 3: Install dependencies using PNPM
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      # Step 4: Build Storybook using PNPM
+      - name: Build Storybook
+        run: pnpm build-storybook
+
+      # Step 5: Run the visual regression tests using PNPM
+      - name: Run Storybook Visual Tests
+        run: pnpm test-storybook:ci
+
+      # Step 6: Upload diffs if tests fail
+      - name: Upload visual test diffs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-test-diffs
+          path: __image_snapshots__/__diff_output__/
+          retention-days: 7
