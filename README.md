@@ -116,6 +116,36 @@ It can **inherit** from `SkeletonProvider` or override per instance.
 
 ---
 
+### 🔹 `SkeletonLeaf`
+
+Wraps **entire content** as a single skeleton unit instead of applying skeleton effects to individual elements.  
+Unlike `SkeletonWrapper`, which recursively applies skeletons to each child element, `SkeletonLeaf` treats the whole component as one skeleton block.
+
+| Prop           | Type                      | Default | Description            |
+| -------------- | ------------------------- | ------- | ---------------------- |
+| loading        | `boolean`                 | `false` | Show skeleton if true  |
+| children       | `ReactNode`               | `null`  | Content to render      |
+| overrideConfig | `Partial<SkeletonConfig>` | `{}`    | Override global config |
+| style          | `CSSProperties`           | `{}`    | Inline style overrides |
+
+---
+
+## 📦 Example with `SkeletonLeaf`
+
+```tsx
+<SkeletonLeaf loading={true}>
+  <div>
+    <h2>My Card Title</h2>
+    <p>This entire card will be shown as one skeleton block.</p>
+    <button>Click me</button>
+  </div>
+</SkeletonLeaf>
+```
+
+👉 In this case, the entire card content becomes a single skeleton rectangle, rather than individual skeleton elements for each text and button.
+
+---
+
 ### 🔹 `SkeletonKeep`
 
 Prevents **its children** from being skeletonized, keeping them visible during loading states.  

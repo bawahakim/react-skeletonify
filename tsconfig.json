@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2019",
     "module": "ESNext",
-    "jsx": "react-jsx",          
+    "jsx": "react-jsx",
     "declaration": true,
     "declarationDir": "dist",
     "emitDeclarationOnly": false,
@@ -13,7 +13,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true
+    "strict": true,
+    "noImplicitAny": false
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", "playground"]
