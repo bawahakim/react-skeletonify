@@ -17,22 +17,19 @@ jobs:
         uses: actions/checkout@v4
 
       # Step 1: Add the PNPM setup action
-      # This installs PNPM and configures the environment for it.
       - name: Set up PNPM
         uses: pnpm/action-setup@v3
         with:
           version: 10 # Specify your PNPM version
 
       # Step 2: Set up Node.js
-      # This will now be configured by the pnpm action
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18 # Match this to your project's Node version
-          cache: "pnpm" # IMPORTANT: Change cache to 'pnpm'
+          node-version: 22
+          cache: "pnpm"
 
       # Step 3: Install dependencies using PNPM
-      # Use `pnpm install` which respects the lockfile.
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
