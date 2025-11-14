@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import SkeletonWrapper from "./SkeletonWrapper";
+import SkeletonKeep from "./SkeletonKeep";
 import { defaultValues } from "../context/skeleton-config";
 import { SkeletonProvider } from "../context/SkeletonContext";
 
@@ -150,13 +151,28 @@ export const Loading: Story = {
   ),
 };
 
-export const NotLoading: Story = {
-  args: { loading: false },
+export const Keep: Story = {
+  args: { loading: true },
   render: ({ loading }) => (
     <div>
       <SkeletonProvider config={defaultValues}>
         <SkeletonWrapper loading={loading}>
-          <UserCard />
+          <div
+            style={{
+              padding: "20px",
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+            }}
+          >
+            <p>This paragraph will be skeletonized during loading.</p>
+            <SkeletonKeep>
+              <p>This paragraph will remain visible and NOT be skeletonized.</p>
+            </SkeletonKeep>
+            <p>Another paragraph that will be skeletonized.</p>
+            <SkeletonKeep>
+              <p>This one is also protected from skeletonization.</p>
+            </SkeletonKeep>
+          </div>
         </SkeletonWrapper>
       </SkeletonProvider>
     </div>

@@ -34,7 +34,7 @@ For complete guides and examples check out the full documentation site:
 - ⚡ **Smooth animations** with multiple presets
 - 🛠️ **Highly customizable** styles, backgrounds, borders, and speed
 - 🧩 Works with **any React component**
-- 🧃 Exclude tags or groups (text, form, media, etc.) from skeleton rendering
+- 🧃 Exclude tags or groups (text, form, media, etc.) from skeleton rendering, or whole children
 - 🪶 Lightweight, no external dependencies
 
 ## 🚀 Installation
@@ -65,7 +65,8 @@ function App() {
         animation: "animation-1",
         borderRadius: "8px",
         animationSpeed: 3,
-      }}>
+      }}
+    >
       <SkeletonWrapper loading={true}>
         <div style={{ height: "120px", width: "400px", padding: "10px" }}>
           <div
@@ -74,7 +75,8 @@ function App() {
               width: "50px",
               borderRadius: "100%",
               marginBottom: "10px",
-            }}></div>
+            }}
+          ></div>
           <h6>React Skeletonify</h6>
           <p>This is an example with global provider config 🚀</p>
         </div>
@@ -114,6 +116,33 @@ It can **inherit** from `SkeletonProvider` or override per instance.
 
 ---
 
+### 🔹 `SkeletonKeep`
+
+Prevents **its children** from being skeletonized, keeping them visible during loading states.  
+Useful for elements like logos, icons, or critical UI that should remain unchanged.
+
+| Prop     | Type        | Default | Description      |
+| -------- | ----------- | ------- | ---------------- |
+| children | `ReactNode` | `null`  | Child components |
+
+---
+
+## 📦 Example with `SkeletonKeep`
+
+```tsx
+<SkeletonWrapper loading={true}>
+  <div>
+    <SkeletonKeep>
+      <img src="/logo.png" alt="Logo" />
+    </SkeletonKeep>
+    <h2>Loading content...</h2>
+    <p>This text will be skeletonized, but the logo stays visible.</p>
+  </div>
+</SkeletonWrapper>
+```
+
+👉 In this case, the logo inside `SkeletonKeep` remains visible while the rest is skeletonized.
+
 ## 🎨 Configuration Options (`SkeletonConfig`)
 
 | Key             | Type                             | Default         | Description          |
@@ -142,7 +171,8 @@ It can **inherit** from `SkeletonProvider` or override per instance.
   overrideConfig={{
     exceptTags: ["img", "button"],
     borderRadius: "6px",
-  }}>
+  }}
+>
   <div>
     <img src="/profile.jpg" alt="Profile" />
     <h2>Hello World</h2>
