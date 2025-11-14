@@ -6,6 +6,7 @@ import createStyle from "../utils/create-style";
 import checkTagInGroup from "../utils/check-tag-in-group";
 import isTextElement from "../utils/is-text-element";
 import SkeletonKeep from "../components/SkeletonKeep";
+import SkeletonIgnore from "../components/SkeletonIgnore";
 
 function useAddSkeleton(config: SkeletonConfig) {
   const { className, exceptTags, exceptTagGroups, textTagsMargin } = config;
@@ -22,6 +23,10 @@ function useAddSkeleton(config: SkeletonConfig) {
 
     if (isSkeletonKeepComponent(elementType)) {
       return element;
+    }
+
+    if (isSkeletonIgnoreComponent(elementType)) {
+      return null;
     }
 
     if (typeof elementType === "string") {
@@ -76,6 +81,12 @@ function isSkeletonKeepComponent(
   elementType: React.ComponentType<any> | string
 ): boolean {
   return elementType === SkeletonKeep;
+}
+
+function isSkeletonIgnoreComponent(
+  elementType: React.ComponentType<any> | string
+): boolean {
+  return elementType === SkeletonIgnore;
 }
 
 export default useAddSkeleton;

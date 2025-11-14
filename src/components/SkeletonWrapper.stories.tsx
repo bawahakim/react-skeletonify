@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import SkeletonWrapper from "./SkeletonWrapper";
 import SkeletonKeep from "./SkeletonKeep";
+import SkeletonIgnore from "./SkeletonIgnore";
 import { defaultValues } from "../context/skeleton-config";
 import { SkeletonProvider } from "../context/SkeletonContext";
 
@@ -172,6 +173,34 @@ export const Keep: Story = {
             <SkeletonKeep>
               <p>This one is also protected from skeletonization.</p>
             </SkeletonKeep>
+          </div>
+        </SkeletonWrapper>
+      </SkeletonProvider>
+    </div>
+  ),
+};
+
+export const Ignore: Story = {
+  args: { loading: true },
+  render: ({ loading }) => (
+    <div>
+      <SkeletonProvider config={defaultValues}>
+        <SkeletonWrapper loading={loading}>
+          <div
+            style={{
+              padding: "20px",
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+            }}
+          >
+            <p>This paragraph will be skeletonized during loading.</p>
+            <p>Another paragraph that will be skeletonized.</p>
+            <SkeletonIgnore>
+              <button>This button is completely hidden during loading</button>
+            </SkeletonIgnore>
+            <SkeletonIgnore>
+              <p>This paragraph is also hidden during loading.</p>
+            </SkeletonIgnore>
           </div>
         </SkeletonWrapper>
       </SkeletonProvider>
