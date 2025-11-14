@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import SkeletonWrapper from "./SkeletonWrapper";
 import SkeletonKeep from "./SkeletonKeep";
 import SkeletonIgnore from "./SkeletonIgnore";
+import SkeletonUnite from "./SkeletonUnite";
 import { defaultValues } from "../context/skeleton-config";
 import { SkeletonProvider } from "../context/SkeletonContext";
 import SkeletonLeaf from "./SkeletonLeaf";
@@ -202,6 +203,57 @@ export const Ignore: Story = {
             <SkeletonIgnore>
               <p>This paragraph is also hidden during loading.</p>
             </SkeletonIgnore>
+          </div>
+        </SkeletonWrapper>
+      </SkeletonProvider>
+    </div>
+  ),
+};
+
+export const Unite: Story = {
+  args: { loading: true },
+  render: ({ loading }) => (
+    <div>
+      <SkeletonProvider
+        config={{
+          textTagsMargin: "8px 0",
+          borderRadius: "8px",
+        }}
+      >
+        <h2>Default</h2>
+        <SkeletonWrapper loading={loading}>
+          <div
+            style={{
+              padding: "20px",
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+              width: "fit-content",
+            }}
+          >
+            <p>This paragraph will be skeletonized individually.</p>
+            <button>Like</button>
+            <button>Share</button>
+            <button>Save</button>
+            <p>Another paragraph that will be skeletonized individually.</p>
+          </div>
+        </SkeletonWrapper>
+        <h2>Unite</h2>
+        <SkeletonWrapper loading={loading}>
+          <div
+            style={{
+              padding: "20px",
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+              width: "fit-content",
+            }}
+          >
+            <p>This paragraph will be skeletonized individually.</p>
+            <SkeletonUnite style={{ width: "fit-content" }}>
+              <button>Like</button>
+              <button>Share</button>
+              <button>Save</button>
+            </SkeletonUnite>
+            <p>Another paragraph that will be skeletonized individually.</p>
           </div>
         </SkeletonWrapper>
       </SkeletonProvider>

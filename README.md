@@ -142,7 +142,34 @@ Unlike `SkeletonWrapper`, which recursively applies skeletons to each child elem
 </SkeletonLeaf>
 ```
 
-👉 In this case, the entire card content becomes a single skeleton rectangle, rather than individual skeleton elements for each text and button.
+### 🔹 `SkeletonUnite`
+
+Merges all children as one skeleton unit instead of applying skeleton effects to individual elements.  
+Useful for treating multiple small elements (like icons or buttons) as a single skeleton block.
+
+| Prop     | Type        | Default | Description      |
+| -------- | ----------- | ------- | ---------------- |
+| children | `ReactNode` | `null`  | Child components |
+
+---
+
+## 📦 Example with `SkeletonUnite`
+
+```tsx
+<SkeletonWrapper loading={true}>
+  <div>
+    <h2>My Card Title</h2>
+    <p>This text will be skeletonized individually.</p>
+    <SkeletonUnite>
+      <button>Like</button>
+      <button>Share</button>
+      <button>Save</button>
+    </SkeletonUnite>
+  </div>
+</SkeletonWrapper>
+```
+
+👉 In this case, the three buttons inside `SkeletonUnite` become a single skeleton block, rather than each button being skeletonized separately.
 
 ---
 
