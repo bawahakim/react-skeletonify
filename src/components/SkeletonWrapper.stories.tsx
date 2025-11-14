@@ -4,327 +4,320 @@ import SkeletonWrapper from "./SkeletonWrapper";
 import SkeletonKeep from "./SkeletonKeep";
 import SkeletonIgnore from "./SkeletonIgnore";
 import SkeletonUnite from "./SkeletonUnite";
-import { defaultValues } from "../context/skeleton-config";
+import {
+  defaultBackground,
+  defaultValues,
+  type SkeletonConfig,
+} from "../context/skeleton-config";
 import { SkeletonProvider } from "../context/SkeletonContext";
 import SkeletonLeaf from "./SkeletonLeaf";
+import {
+  ComparisonColumn,
+  ComparisonRow,
+  StoryLayout,
+  UserCard,
+} from "../stories/SkeletonStoryLayout";
 
 interface StoryArgs {
   loading: boolean;
+  animation: SkeletonConfig["animation"];
+  animationSpeed: number;
+  borderRadius: string;
+  textTagsMargin: string;
+  background: string;
 }
 
 const meta = {
   component: SkeletonWrapper,
-} satisfies Meta<typeof SkeletonWrapper>;
+  args: {
+    loading: true,
+    animation: defaultValues.animation,
+    animationSpeed: defaultValues.animationSpeed,
+    borderRadius: "8px",
+    textTagsMargin: defaultValues.textTagsMargin,
+    // leave empty string so defaultBackground[animation] is used
+    background: "",
+  },
+  argTypes: {
+    loading: {
+      control: {
+        type: "boolean",
+      },
+    },
+    animation: {
+      control: {
+        type: "inline-radio",
+      },
+      options: ["animation-1", "animation-2"],
+    },
+    animationSpeed: {
+      control: {
+        type: "number",
+      },
+    },
+    borderRadius: {
+      control: {
+        type: "text",
+      },
+    },
+    textTagsMargin: {
+      control: {
+        type: "text",
+      },
+    },
+    background: {
+      control: {
+        type: "text",
+      },
+      description:
+        "Overrides the computed background. Leave empty to use animation-based default.",
+    },
+  },
+} satisfies Meta<StoryArgs>;
 
 export default meta;
 
 type Story = StoryObj<StoryArgs>;
 
-// Sample card component to demonstrate skeleton
-const UserCard = () => (
-  <div
-    style={{
-      padding: "20px",
-      border: "1px solid #ddd",
-      borderRadius: "8px",
-      maxWidth: "400px",
-    }}
-  >
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "16px",
-        marginBottom: "16px",
-      }}
-    >
-      <img
-        src="https://i.pravatar.cc/150?u=fake@pravatar.com"
-        alt="User avatar"
-        style={{ width: "80px", height: "80px", borderRadius: "50%" }}
-      />
-      <div>
-        <h2 style={{ margin: "0 0 8px 0" }}>John Doe</h2>
-        <p style={{ margin: 0, color: "#666" }}>Software Engineer</p>
-      </div>
-    </div>
-    <p style={{ lineHeight: "1.6" }}>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua.
-    </p>
-    <button
-      style={{
-        padding: "8px 16px",
-        background: "#007bff",
-        color: "white",
-        border: "none",
-        borderRadius: "4px",
-      }}
-    >
-      View Profile
-    </button>
-  </div>
-);
+const createProviderConfig = (args: StoryArgs): Partial<SkeletonConfig> => {
+  return {
+    animation: args.animation,
+    animationSpeed: args.animationSpeed,
+    borderRadius: args.borderRadius,
+    textTagsMargin: args.textTagsMargin,
+    background: args.background,
+  };
+};
 
-const ArticleCard = () => (
-  <div style={{ padding: "20px" }}>
-    <h1>Article Title</h1>
-    <p>This is a paragraph of text that will be skeletonized.</p>
-    <p>Another paragraph with more content to show the skeleton effect.</p>
-    <div style={{ display: "flex", gap: "10px", marginTop: "16px" }}>
-      <button
-        style={{
-          padding: "8px 16px",
-          background: "#28a745",
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-        }}
-      >
-        Read More
-      </button>
-      <button
-        style={{
-          padding: "8px 16px",
-          background: "#dc3545",
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-        }}
-      >
-        Share
-      </button>
-    </div>
-  </div>
-);
+const createDisplayConfig = (args: StoryArgs): SkeletonConfig => {
+  const {
+    animation,
+    background,
+    animationSpeed,
+    borderRadius,
+    textTagsMargin,
+  } = args;
+
+  const effectiveBackground =
+    background && background.trim() !== ""
+      ? background
+      : defaultBackground[animation];
+
+  return {
+    ...defaultValues,
+    animation,
+    animationSpeed,
+    borderRadius,
+    textTagsMargin,
+    background: effectiveBackground,
+  };
+};
 
 export const Default: Story = {
-  args: { loading: true },
-  render: ({ loading }) => (
-    <div>
-      <SkeletonProvider config={defaultValues}>
-        <SkeletonWrapper loading={loading}>
-          <UserCard />
-        </SkeletonWrapper>
-      </SkeletonProvider>
-    </div>
-  ),
+  args: {
+    borderRadius: "8px",
+  },
+
+  render: (args) => {
+    const providerConfig = createProviderConfig(args);
+    const displayConfig = createDisplayConfig(args);
+
+    return (
+      <StoryLayout
+        title="SkeletonWrapper"
+        subtitle="Wrap existing UI and let React Skeletonify handle the loading state."
+        config={displayConfig}
+      >
+        <SkeletonProvider config={providerConfig}>
+          <SkeletonWrapper loading={args.loading}>
+            <UserCard />
+          </SkeletonWrapper>
+        </SkeletonProvider>
+      </StoryLayout>
+    );
+  },
 };
 
 export const WithCustomAnimation: Story = {
-  render: ({ loading }) => (
-    <div>
-      <SkeletonProvider config={defaultValues}>
-        <SkeletonWrapper loading={loading}>
-          <UserCard />
-        </SkeletonWrapper>
-      </SkeletonProvider>
-    </div>
-  ),
+  render: (args) => {
+    const providerConfig = createProviderConfig(args);
+    const displayConfig = createDisplayConfig(args);
+
+    return (
+      <StoryLayout
+        title="SkeletonWrapper with custom animation"
+        subtitle="Experiment with animation and layout while keeping your content untouched."
+        config={displayConfig}
+      >
+        <SkeletonProvider config={providerConfig}>
+          <SkeletonWrapper loading={args.loading}>
+            <UserCard />
+          </SkeletonWrapper>
+        </SkeletonProvider>
+      </StoryLayout>
+    );
+  },
   args: {
     loading: true,
   },
-};
-
-export const SimpleText: Story = {
-  render: ({ loading }) => (
-    <div>
-      <SkeletonProvider config={defaultValues}>
-        <SkeletonWrapper loading={loading}>
-          <ArticleCard />
-        </SkeletonWrapper>
-      </SkeletonProvider>
-    </div>
-  ),
-  args: {
-    loading: true,
-  },
-};
-
-export const Loading: Story = {
-  args: { loading: true },
-  render: ({ loading }) => (
-    <div>
-      <SkeletonProvider config={defaultValues}>
-        <SkeletonWrapper loading={loading}>
-          <UserCard />
-        </SkeletonWrapper>
-      </SkeletonProvider>
-    </div>
-  ),
 };
 
 export const Keep: Story = {
   args: { loading: true },
-  render: ({ loading }) => (
-    <div>
-      <SkeletonProvider config={defaultValues}>
-        <SkeletonWrapper loading={loading}>
-          <div
-            style={{
-              padding: "20px",
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-            }}
-          >
-            <p>This paragraph will be skeletonized during loading.</p>
-            <SkeletonKeep>
-              <p>This paragraph will remain visible and NOT be skeletonized.</p>
-            </SkeletonKeep>
-            <p>Another paragraph that will be skeletonized.</p>
-            <SkeletonKeep>
-              <p>This one is also protected from skeletonization.</p>
-            </SkeletonKeep>
-          </div>
-        </SkeletonWrapper>
-      </SkeletonProvider>
-    </div>
-  ),
+  render: (args) => {
+    const providerConfig = createProviderConfig(args);
+    const displayConfig = createDisplayConfig(args);
+
+    return (
+      <StoryLayout
+        title="SkeletonKeep"
+        subtitle="Mark regions that should stay visible even while the rest is skeletonized."
+        config={displayConfig}
+      >
+        <SkeletonProvider config={providerConfig}>
+          <ComparisonRow>
+            <ComparisonColumn title="Default">
+              <SkeletonWrapper loading={args.loading}>
+                <UserCard />
+              </SkeletonWrapper>
+            </ComparisonColumn>
+
+            <ComparisonColumn title="Kept image">
+              <SkeletonWrapper loading={args.loading}>
+                <UserCard
+                  imageWrapper={(children) => (
+                    <SkeletonKeep>{children}</SkeletonKeep>
+                  )}
+                />
+              </SkeletonWrapper>
+            </ComparisonColumn>
+          </ComparisonRow>
+        </SkeletonProvider>
+      </StoryLayout>
+    );
+  },
 };
 
 export const Ignore: Story = {
   args: { loading: true },
-  render: ({ loading }) => (
-    <div>
-      <SkeletonProvider config={defaultValues}>
-        <SkeletonWrapper loading={loading}>
-          <div
-            style={{
-              padding: "20px",
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-            }}
-          >
-            <p>This paragraph will be skeletonized during loading.</p>
-            <p>Another paragraph that will be skeletonized.</p>
-            <SkeletonIgnore>
-              <button>This button is completely hidden during loading</button>
-            </SkeletonIgnore>
-            <SkeletonIgnore>
-              <p>This paragraph is also hidden during loading.</p>
-            </SkeletonIgnore>
-          </div>
-        </SkeletonWrapper>
-      </SkeletonProvider>
-    </div>
-  ),
+  render: (args) => {
+    const providerConfig = createProviderConfig(args);
+    const displayConfig = createDisplayConfig(args);
+
+    return (
+      <StoryLayout
+        title="SkeletonIgnore"
+        subtitle="Hide interactive elements entirely until loading is finished."
+        config={displayConfig}
+      >
+        <SkeletonProvider config={providerConfig}>
+          <ComparisonRow>
+            <ComparisonColumn title="Default">
+              <SkeletonWrapper loading={args.loading}>
+                <UserCard />
+              </SkeletonWrapper>
+            </ComparisonColumn>
+
+            <ComparisonColumn title="Ignored button">
+              <SkeletonWrapper loading={args.loading}>
+                <UserCard
+                  buttonWrapper={(children) => (
+                    <SkeletonIgnore>{children}</SkeletonIgnore>
+                  )}
+                />
+              </SkeletonWrapper>
+            </ComparisonColumn>
+          </ComparisonRow>
+        </SkeletonProvider>
+      </StoryLayout>
+    );
+  },
 };
 
 export const Unite: Story = {
   args: { loading: true },
-  render: ({ loading }) => (
-    <div>
-      <SkeletonProvider
-        config={{
-          textTagsMargin: "8px 0",
-          borderRadius: "8px",
-        }}
+  render: (args) => {
+    const baseProviderConfig = createProviderConfig(args);
+    const providerConfig: Partial<SkeletonConfig> = {
+      ...baseProviderConfig,
+      textTagsMargin: "8px 0",
+      borderRadius: "8px",
+    };
+
+    const displayConfig: SkeletonConfig = {
+      ...createDisplayConfig(args),
+      textTagsMargin: "8px 0",
+      borderRadius: "8px",
+    };
+
+    return (
+      <StoryLayout
+        title="SkeletonUnite"
+        subtitle="Group multiple elements into a single skeleton block for compact loading states."
+        config={displayConfig}
+        configTitle="Customized values"
       >
-        <h2>Default</h2>
-        <SkeletonWrapper loading={loading}>
-          <div
-            style={{
-              padding: "20px",
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              width: "fit-content",
-            }}
-          >
-            <p>This paragraph will be skeletonized individually.</p>
-            <button>Like</button>
-            <button>Share</button>
-            <button>Save</button>
-            <p>Another paragraph that will be skeletonized individually.</p>
-          </div>
-        </SkeletonWrapper>
-        <h2>Unite</h2>
-        <SkeletonWrapper loading={loading}>
-          <div
-            style={{
-              padding: "20px",
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              width: "fit-content",
-            }}
-          >
-            <p>This paragraph will be skeletonized individually.</p>
-            <SkeletonUnite style={{ width: "fit-content" }}>
-              <button>Like</button>
-              <button>Share</button>
-              <button>Save</button>
-            </SkeletonUnite>
-            <p>Another paragraph that will be skeletonized individually.</p>
-          </div>
-        </SkeletonWrapper>
-      </SkeletonProvider>
-    </div>
-  ),
+        <SkeletonProvider config={providerConfig}>
+          <ComparisonRow>
+            <ComparisonColumn title="Default">
+              <SkeletonWrapper loading={args.loading}>
+                <UserCard />
+              </SkeletonWrapper>
+            </ComparisonColumn>
+
+            <ComparisonColumn title="United text">
+              <SkeletonWrapper loading={args.loading}>
+                <UserCard
+                  textWrapper={(children) => (
+                    <SkeletonUnite
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "6px",
+                      }}
+                    >
+                      {children}
+                    </SkeletonUnite>
+                  )}
+                />
+              </SkeletonWrapper>
+            </ComparisonColumn>
+          </ComparisonRow>
+        </SkeletonProvider>
+      </StoryLayout>
+    );
+  },
 };
 
 // SkeletonLeaf stories
 export const SkeletonLeafDefault: Story = {
   args: { loading: true },
-  render: ({ loading }) => (
-    <div>
-      <SkeletonProvider config={defaultValues}>
-        <SkeletonLeaf loading={loading}>
-          <UserCard />
-        </SkeletonLeaf>
-      </SkeletonProvider>
-    </div>
-  ),
-};
+  render: (args) => {
+    const providerConfig = createProviderConfig(args);
+    const displayConfig = createDisplayConfig(args);
 
-export const SkeletonLeafNotLoading: Story = {
-  args: { loading: false },
-  render: ({ loading }) => (
-    <div>
-      <SkeletonProvider config={defaultValues}>
-        <SkeletonLeaf loading={loading}>
-          <UserCard />
-        </SkeletonLeaf>
-      </SkeletonProvider>
-    </div>
-  ),
-};
+    return (
+      <StoryLayout
+        title="SkeletonLeaf"
+        subtitle="Apply a single skeleton overlay to any subtree."
+        config={displayConfig}
+      >
+        <SkeletonProvider config={providerConfig}>
+          <ComparisonRow>
+            <ComparisonColumn title="Wrapper">
+              <SkeletonWrapper loading={args.loading}>
+                <UserCard />
+              </SkeletonWrapper>
+            </ComparisonColumn>
 
-export const SkeletonLeafArticleExample: Story = {
-  render: ({ loading }) => (
-    <div>
-      <SkeletonProvider config={defaultValues}>
-        <SkeletonLeaf loading={loading}>
-          <ArticleCard />
-        </SkeletonLeaf>
-      </SkeletonProvider>
-    </div>
-  ),
-  args: {
-    loading: true,
-  },
-};
-
-export const SkeletonLeafVsWrapper: Story = {
-  render: ({ loading }) => (
-    <div style={{ display: "flex", gap: "40px", alignItems: "flex-start" }}>
-      <div>
-        <h3>SkeletonWrapper (individual elements)</h3>
-        <SkeletonProvider config={defaultValues}>
-          <SkeletonWrapper loading={loading}>
-            <UserCard />
-          </SkeletonWrapper>
+            <ComparisonColumn title="Leaf">
+              <SkeletonLeaf loading={args.loading}>
+                <UserCard />
+              </SkeletonLeaf>
+            </ComparisonColumn>
+          </ComparisonRow>
         </SkeletonProvider>
-      </div>
-      <div>
-        <h3>SkeletonLeaf (single skeleton)</h3>
-        <SkeletonProvider config={defaultValues}>
-          <SkeletonLeaf loading={loading}>
-            <UserCard />
-          </SkeletonLeaf>
-        </SkeletonProvider>
-      </div>
-    </div>
-  ),
-  args: {
-    loading: true,
+      </StoryLayout>
+    );
   },
 };

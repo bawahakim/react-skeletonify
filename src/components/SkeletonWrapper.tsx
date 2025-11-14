@@ -5,7 +5,7 @@ import { useSkeleton } from "../context/SkeletonContext";
 
 export interface SkeletonWrapperProps {
   loading: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   overrideConfig?: Partial<SkeletonConfig>;
   style?: CSSProperties;
 }
