@@ -135,12 +135,19 @@ Unlike `SkeletonWrapper`, which recursively applies skeletons to each child elem
 ```tsx
 <SkeletonLeaf loading={true}>
   <div>
-    <h2>My Card Title</h2>
-    <p>This entire card will be shown as one skeleton block.</p>
-    <button>Click me</button>
+    <img src="/avatar.jpg" alt="Profile avatar" />
+    <h2>John Doe</h2>
+    <p>Software Engineer</p>
+    <p>
+      This profile card (avatar, text, and button) will be treated as one
+      skeleton block while loading.
+    </p>
+    <button>View profile</button>
   </div>
 </SkeletonLeaf>
 ```
+
+<video src="docs/skeleton-leaf.mp4" width="320" autoplay loop muted playsinline></video>
 
 ### 🔹 `SkeletonUnite`
 
@@ -158,18 +165,20 @@ Useful for treating multiple small elements (like icons or buttons) as a single 
 ```tsx
 <SkeletonWrapper loading={true}>
   <div>
-    <h2>My Card Title</h2>
-    <p>This text will be skeletonized individually.</p>
+    <img src="/avatar.jpg" alt="Profile avatar" />
+    <h2>John Doe</h2>
     <SkeletonUnite>
-      <button>Like</button>
-      <button>Share</button>
-      <button>Save</button>
+      <p>Software Engineer</p>
+      <p>This text will be merged with above.</p>
     </SkeletonUnite>
   </div>
 </SkeletonWrapper>
 ```
 
-👉 In this case, the three buttons inside `SkeletonUnite` become a single skeleton block, rather than each button being skeletonized separately.
+<video src="docs/skeleton-unite.mp4" width="320" autoplay loop muted playsinline></video>
+
+👉 In this case, title and subtitle inside `SkeletonUnite` become a single
+skeleton block, rather than each text being skeletonized separately.
 
 ---
 
@@ -190,15 +199,23 @@ Useful for elements like logos, icons, or critical UI that should remain unchang
 <SkeletonWrapper loading={true}>
   <div>
     <SkeletonKeep>
-      <img src="/logo.png" alt="Logo" />
+      <img src="/avatar.jpg" alt="Profile avatar" />
     </SkeletonKeep>
-    <h2>Loading content...</h2>
-    <p>This text will be skeletonized, but the logo stays visible.</p>
+    <h2>John Doe</h2>
+    <p>Software Engineer</p>
+    <p>
+      This text and the button below will be skeletonized, but the avatar stays
+      visible.
+    </p>
+    <button>View profile</button>
   </div>
 </SkeletonWrapper>
 ```
 
-👉 In this case, the logo inside `SkeletonKeep` remains visible while the rest is skeletonized.
+<video src="docs/skeleton-keep.mp4" width="320" autoplay loop muted playsinline></video>
+
+👉 In this case, the avatar inside `SkeletonKeep` remains visible while the
+rest of the card is skeletonized.
 
 ---
 
@@ -218,16 +235,21 @@ Useful for elements that should not appear at all during loading (e.g., interact
 ```tsx
 <SkeletonWrapper loading={true}>
   <div>
-    <h2>Loading content...</h2>
+    <img src="/avatar.jpg" alt="Profile avatar" />
+    <h2>John Doe</h2>
+    <p>Software Engineer</p>
     <p>This text will be skeletonized.</p>
     <SkeletonIgnore>
-      <button>Submit Form</button>
+      <button>View profile</button>
     </SkeletonIgnore>
   </div>
 </SkeletonWrapper>
 ```
 
-👉 In this case, the button inside `SkeletonIgnore` is completely hidden during loading.
+<video src="docs/skeleton-ignore.mp4" width="320" autoplay loop muted playsinline></video>
+
+👉 In this case, the call-to-action button inside `SkeletonIgnore` is completely
+hidden during loading.
 
 ## 🎨 Configuration Options (`SkeletonConfig`)
 
