@@ -6,7 +6,7 @@ import createStyle from "../utils/create-style";
 import checkTagInGroup from "../utils/check-tag-in-group";
 import isTextElement from "../utils/is-text-element";
 
-function useAddSkelton(config: SkeletonConfig) {
+function useAddSkeleton(config: SkeletonConfig) {
   const { className, exceptTags, exceptTagGroups, textTagsMargin } = config;
   const CLASS_NAME = `react-skeletonify ${className} `;
   const style = createStyle(config);
@@ -67,4 +67,4 @@ function useAddSkelton(config: SkeletonConfig) {
   return addSkeleton;
 }
 
-export default useAddSkelton;
+export default useAddSkeleton;

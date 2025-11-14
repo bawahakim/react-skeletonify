@@ -1,5 +1,5 @@
 import React from "react";
-import useAddSkelton from "../hooks/useAddSkelton";
+import useAddSkeleton from "../hooks/useAddSkeleton";
 import { SkeletonConfig } from "../context/skeleton-config";
 
 interface SkeletonElementProps {
@@ -9,7 +9,7 @@ interface SkeletonElementProps {
 
 const SkeletonElement: React.FC<SkeletonElementProps> = (props) => {
   const { children, config } = props;
-  const addSkeleton = useAddSkelton(config);
+  const addSkeleton = useAddSkeleton(config);
 
   return React.Children.map(children, (child) => addSkeleton(child));
 };
