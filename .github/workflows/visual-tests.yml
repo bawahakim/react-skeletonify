@@ -2,7 +2,6 @@
 
 name: Visual Regression Tests
 
-# Trigger this workflow on pushes and pull requests to the main branch
 on:
   push:
     branches: [main, master]
@@ -11,38 +10,45 @@ on:
 
 jobs:
   run-visual-tests:
-    runs-on: ubuntu-latest # Use a standard Linux runner
+    runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the repository's code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Set up a specific version of Node.js
+      # Step 1: Add the PNPM setup action
+      # This installs PNPM and configures the environment for it.
+      - name: Set up PNPM
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8 # Specify your PNPM version
+
+      # Step 2: Set up Node.js
+      # This will now be configured by the pnpm action
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18 # Match this to your project's Node version
-          cache: "npm" # Cache npm dependencies to speed up subsequent runs
+          cache: "pnpm" # IMPORTANT: Change cache to 'pnpm'
 
-      # Step 3: Install project dependencies
+      # Step 3: Install dependencies using PNPM
+      # Use `pnpm install` which respects the lockfile.
       - name: Install dependencies
-        run: npm ci # 'ci' is faster and more reliable for CI environments
+        run: pnpm install --frozen-lockfile
 
-      # Step 4: Build Storybook as a static app
+      # Step 4: Build Storybook using PNPM
       - name: Build Storybook
-        run: npm run build-storybook
+        run: pnpm build-storybook
 
-      # Step 5: Run the visual regression tests
+      # Step 5: Run the visual regression tests using PNPM
       - name: Run Storybook Visual Tests
-        run: npm run test-storybook:ci
+        run: pnpm test-storybook:ci
 
-      # Step 6: Upload diffs if tests fail (CRITICAL for debugging)
-      # This step will only run if the previous step fails.
+      # Step 6: Upload diffs if tests fail
       - name: Upload visual test diffs
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: visual-test-diffs
           path: __image_snapshots__/__diff_output__/
-          retention-days: 7 # Keep the artifacts for 7 days
+          retention-days: 7
