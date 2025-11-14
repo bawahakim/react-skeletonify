@@ -7,6 +7,7 @@ import checkTagInGroup from "../utils/check-tag-in-group";
 import isTextElement from "../utils/is-text-element";
 import SkeletonKeep from "../components/SkeletonKeep";
 import SkeletonIgnore from "../components/SkeletonIgnore";
+import SkeletonUnite from "../components/SkeletonUnite";
 
 function useAddSkeleton(config: SkeletonConfig) {
   const { className, exceptTags, exceptTagGroups, textTagsMargin } = config;
@@ -27,6 +28,10 @@ function useAddSkeleton(config: SkeletonConfig) {
 
     if (isSkeletonIgnoreComponent(elementType)) {
       return null;
+    }
+
+    if (isSkeletonUniteComponent(elementType)) {
+      return createLeafNode(element, CLASS_NAME, style);
     }
 
     if (typeof elementType === "string") {
@@ -87,6 +92,12 @@ function isSkeletonIgnoreComponent(
   elementType: React.ComponentType<any> | string
 ): boolean {
   return elementType === SkeletonIgnore;
+}
+
+function isSkeletonUniteComponent(
+  elementType: React.ComponentType<any> | string
+): boolean {
+  return elementType === SkeletonUnite;
 }
 
 export default useAddSkeleton;
