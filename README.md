@@ -143,6 +143,35 @@ Useful for elements like logos, icons, or critical UI that should remain unchang
 
 👉 In this case, the logo inside `SkeletonKeep` remains visible while the rest is skeletonized.
 
+---
+
+### 🔹 `SkeletonIgnore`
+
+Hides **its children** completely during loading states, removing them from the DOM.  
+Useful for elements that should not appear at all during loading (e.g., interactive elements like buttons).
+
+| Prop     | Type        | Default | Description      |
+| -------- | ----------- | ------- | ---------------- |
+| children | `ReactNode` | `null`  | Child components |
+
+---
+
+## 📦 Example with `SkeletonIgnore`
+
+```tsx
+<SkeletonWrapper loading={true}>
+  <div>
+    <h2>Loading content...</h2>
+    <p>This text will be skeletonized.</p>
+    <SkeletonIgnore>
+      <button>Submit Form</button>
+    </SkeletonIgnore>
+  </div>
+</SkeletonWrapper>
+```
+
+👉 In this case, the button inside `SkeletonIgnore` is completely hidden during loading.
+
 ## 🎨 Configuration Options (`SkeletonConfig`)
 
 | Key             | Type                             | Default         | Description          |
