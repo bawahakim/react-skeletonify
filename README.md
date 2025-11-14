@@ -35,6 +35,7 @@ For complete guides and examples check out the full documentation site:
 - 🛠️ **Highly customizable** styles, backgrounds, borders, and speed
 - 🧩 Works with **any React component**
 - 🧃 Exclude tags or groups (text, form, media, etc.) from skeleton rendering
+- 🚫 **SkeletonIgnore** component to selectively skip skeletonization
 - 🪶 Lightweight, no external dependencies
 
 ## 🚀 Installation
@@ -65,7 +66,8 @@ function App() {
         animation: "animation-1",
         borderRadius: "8px",
         animationSpeed: 3,
-      }}>
+      }}
+    >
       <SkeletonWrapper loading={true}>
         <div style={{ height: "120px", width: "400px", padding: "10px" }}>
           <div
@@ -74,7 +76,8 @@ function App() {
               width: "50px",
               borderRadius: "100%",
               marginBottom: "10px",
-            }}></div>
+            }}
+          ></div>
           <h6>React Skeletonify</h6>
           <p>This is an example with global provider config 🚀</p>
         </div>
@@ -114,7 +117,16 @@ It can **inherit** from `SkeletonProvider` or override per instance.
 
 ---
 
-## 🎨 Configuration Options (`SkeletonConfig`)
+### 🔹 `SkeletonIgnore`
+
+Wraps **content that should remain visible** during skeleton loading states.  
+Unlike `exceptTags` (which excludes entire HTML elements), `SkeletonIgnore` allows you to selectively skip skeletonization for **any React component**.
+
+| Prop     | Type        | Default | Description       |
+| -------- | ----------- | ------- | ----------------- |
+| children | `ReactNode` | `null`  | Content to ignore |
+
+---
 
 | Key             | Type                             | Default         | Description          |
 | --------------- | -------------------------------- | --------------- | -------------------- |
@@ -142,7 +154,8 @@ It can **inherit** from `SkeletonProvider` or override per instance.
   overrideConfig={{
     exceptTags: ["img", "button"],
     borderRadius: "6px",
-  }}>
+  }}
+>
   <div>
     <img src="/profile.jpg" alt="Profile" />
     <h2>Hello World</h2>
@@ -152,6 +165,24 @@ It can **inherit** from `SkeletonProvider` or override per instance.
 ```
 
 👉 In this case, the `img` and `button` will not be skeletonized.
+
+## � Example with `SkeletonIgnore`
+
+```tsx
+import { SkeletonWrapper, SkeletonIgnore } from "react-skeletonify";
+
+<SkeletonWrapper loading={true}>
+  <div>
+    <h2>User Name</h2>
+    <p>This paragraph will be skeletonized</p>
+    <SkeletonIgnore>
+      <button>Always Visible Button</button>
+    </SkeletonIgnore>
+  </div>
+</SkeletonWrapper>;
+```
+
+👉 In this example, the `img` and `button` wrapped in `SkeletonIgnore` remain visible, while the `h2` and `p` elements show skeleton loading.
 
 ## 📌 Versioning
 
