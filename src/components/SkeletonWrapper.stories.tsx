@@ -5,6 +5,7 @@ import SkeletonKeep from "./SkeletonKeep";
 import SkeletonIgnore from "./SkeletonIgnore";
 import { defaultValues } from "../context/skeleton-config";
 import { SkeletonProvider } from "../context/SkeletonContext";
+import SkeletonLeaf from "./SkeletonLeaf";
 
 interface StoryArgs {
   loading: boolean;
@@ -206,4 +207,72 @@ export const Ignore: Story = {
       </SkeletonProvider>
     </div>
   ),
+};
+
+// SkeletonLeaf stories
+export const SkeletonLeafDefault: Story = {
+  args: { loading: true },
+  render: ({ loading }) => (
+    <div>
+      <SkeletonProvider config={defaultValues}>
+        <SkeletonLeaf loading={loading}>
+          <UserCard />
+        </SkeletonLeaf>
+      </SkeletonProvider>
+    </div>
+  ),
+};
+
+export const SkeletonLeafNotLoading: Story = {
+  args: { loading: false },
+  render: ({ loading }) => (
+    <div>
+      <SkeletonProvider config={defaultValues}>
+        <SkeletonLeaf loading={loading}>
+          <UserCard />
+        </SkeletonLeaf>
+      </SkeletonProvider>
+    </div>
+  ),
+};
+
+export const SkeletonLeafArticleExample: Story = {
+  render: ({ loading }) => (
+    <div>
+      <SkeletonProvider config={defaultValues}>
+        <SkeletonLeaf loading={loading}>
+          <ArticleCard />
+        </SkeletonLeaf>
+      </SkeletonProvider>
+    </div>
+  ),
+  args: {
+    loading: true,
+  },
+};
+
+export const SkeletonLeafVsWrapper: Story = {
+  render: ({ loading }) => (
+    <div style={{ display: "flex", gap: "40px", alignItems: "flex-start" }}>
+      <div>
+        <h3>SkeletonWrapper (individual elements)</h3>
+        <SkeletonProvider config={defaultValues}>
+          <SkeletonWrapper loading={loading}>
+            <UserCard />
+          </SkeletonWrapper>
+        </SkeletonProvider>
+      </div>
+      <div>
+        <h3>SkeletonLeaf (single skeleton)</h3>
+        <SkeletonProvider config={defaultValues}>
+          <SkeletonLeaf loading={loading}>
+            <UserCard />
+          </SkeletonLeaf>
+        </SkeletonProvider>
+      </div>
+    </div>
+  ),
+  args: {
+    loading: true,
+  },
 };
